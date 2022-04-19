@@ -48,9 +48,22 @@ def main():
     correct_states = []
     
     while len(correct_states) < 50:
-        answer_state = create_state_prompt(correct_states)  
-        check_answer(answer_state, correct_states)
+        answer_state = create_state_prompt(correct_states)
+        
+        if answer_state.title() == "Exit":
+            data = open_file()
+            missing_states = []
             
+            for state in data.state:
+                if state not in correct_states:
+                    missing_states.append(state)
+            
+            missing_states_data = pandas.DataFrame(missing_states)
+            missing_states_data.to_csv("missing_states.csv")
+            break
+        
+        check_answer(answer_state, correct_states)
+        
     # mainloop() works like exitonclick() but prevents user from exiting from clicking states
     turtle.mainloop()
 
